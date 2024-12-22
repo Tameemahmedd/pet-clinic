@@ -13,6 +13,13 @@ pipeline {
         MYSQL_HOST = 'mysqldb'  // Host name of the MySQL container
         PET_CLINIC_PORT = '9091'  // Port for pet-clinic application
     }
+        stages {
+            stage('Checkout SCM') {
+                steps {
+                    git url: 'https://github.com/Tameemahmedd/pet-clinic.git', branch: 'main'
+                }
+            }
+        }
 
     stages {
         stage('Clone Repository') {
