@@ -26,6 +26,8 @@ pipeline {
 
         stage('Build') {
             steps {
+                sh 'chmod +x ./mvnw'
+
                 // Run Maven to clean and compile the project
                 echo 'Building the project with Maven'
                 sh './mvnw clean compile'  // Using Maven Wrapper to compile
