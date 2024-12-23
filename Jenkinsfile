@@ -6,7 +6,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'pet-clinic-app'  // Name for the Docker image
         DOCKER_TAG = 'latest'  // Tag for the Docker image
         EC2_USER = 'ec2-user'  // SSH username for EC2 instance (Amazon Linux)
-        EC2_IP = '3.83.179.11'  // EC2 instance IP address
+        EC2_IP = '3.95.213.130'  // EC2 instance IP address
         PRIVATE_KEY_PATH = 'pet-clinic-keypair.pem'  // Path to your private SSH key
         MYSQL_PASSWORD = 'root123@'  // MySQL root password
         MYSQL_PORT = '3306'  // MySQL port inside the container
