@@ -20,12 +20,14 @@ pipeline {
             steps {
                 // Clone the repository from GitHub
                 echo 'Cloning the Git repository'
-                git 'https://github.com/Tameemahmedd/pet-clinic'  // Replace with actual repo URL
+                git branch: 'main', credentialsId: 'git-credentials', url: 'https://github.com/Tameemahmedd/pet-clinic.git'  // Replace with actual repo URL
             }
         }
 
         stage('Build') {
             steps {
+                sh 'chmod +x ./mvnw'
+
                 // Run Maven to clean and compile the project
                 echo 'Building the project with Maven'
                 sh './mvnw clean compile'  // Using Maven Wrapper to compile
