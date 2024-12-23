@@ -8,7 +8,6 @@ pipeline {
         EC2_USER = 'ec2-user'  // SSH username for EC2 instance (Amazon Linux)
         EC2_IP = '13.203.158.113'  // EC2 instance IP address
         PRIVATE_KEY_PATH = 'pet-clinic-keypair.pem'  // Path to your private SSH key
-        MYSQL_PASSWORD = 'root123@'  // MySQL root password
         MYSQL_PORT = '3306'  // MySQL port inside the container
         MYSQL_HOST = 'mysqldb'  // Host name of the MySQL container
         PET_CLINIC_PORT = '9091'  // Port for pet-clinic application
@@ -97,7 +96,7 @@ stage('Containerize') {
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo systemctl start docker'
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker network create bootApp || true'  // Create network if not exists
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
-                                           -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DATABASE=pet_clinic mysql:9.0.1'  // Run MySQL container on EC2
+                                           -e MYSQL_ROOT_PASSWORD=root123@ -e MYSQL_DATABASE=pet_clinic mysql:9.0.1'  // Run MySQL container on EC2
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker pull tameemahmed/pet-clinic-1.0.1:latest'
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker run -d --name pet-clinic -p ${PET_CLINIC_PORT}:9091 --network=bootApp -e MYSQL_HOST=mysqldb -e MYSQL_PORT=${MYSQL_PORT} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'
                                    """
