@@ -48,32 +48,32 @@ pipeline {
             }
         }
 
-        stage('Containerize') {
-            steps {
-                echo 'Building Docker images and running containers'
+stage('Containerize') {
+    steps {
+        echo 'Building Docker images and running containers'
 
-                script {
-                    // Build the MySQL container
-                    sh '''
-                        docker network create bootApp || true  // Create a Docker network (ignore if it already exists)
-                        docker pull mysql:9.0.1  // Pull the MySQL image
-                        docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
-                            -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} \
-                            -e MYSQL_DATABASE=pet_clinic \
-                            mysql:9.0.1  // Run MySQL container
-                    '''
+        script {
+            // Build the MySQL container
+            sh '''
+                docker network create bootApp || true  # Create a Docker network (ignore if it already exists)
+                docker pull mysql:9.0.1  # Pull the MySQL image
+                docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
+                    -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} \
+                    -e MYSQL_DATABASE=pet_clinic \
+                    mysql:9.0.1  # Run MySQL container
+            '''
 
-                    // Build the Pet Clinic application container
-                    sh '''
-                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .  // Build the Docker image for the pet-clinic app
-                        docker run -d --name pet-clinic -p ${PET_CLINIC_PORT}:9091 --network=bootApp \
-                            -e MYSQL_HOST=mysqldb \
-                            -e MYSQL_PORT=${MYSQL_PORT} \
-                            ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}  // Run Pet Clinic application container
-                    '''
-                }
-            }
+            // Build the Pet Clinic application container
+            sh '''
+                docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .  # Build the Docker image for the pet-clinic app
+                docker run -d --name pet-clinic -p ${PET_CLINIC_PORT}:9091 --network=bootApp \
+                    -e MYSQL_HOST=mysqldb \
+                    -e MYSQL_PORT=${MYSQL_PORT} \
+                    ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}  # Run Pet Clinic application container
+            '''
         }
+    }
+}
 
         stage('Deploy') {
             steps {
