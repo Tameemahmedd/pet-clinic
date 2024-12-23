@@ -18,7 +18,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yourusername/pet-clinic.git'
+                    git url: 'https://github.com/yourusername/your-repo.git',
+                    credentialsId: 'git-credentials',
+                    branch: 'main'
             }
         }
         stage('Clone Repository') {
