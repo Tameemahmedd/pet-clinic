@@ -27,7 +27,7 @@ pipeline {
             steps {
                 // Clone the repository from GitHub
                 echo 'Cloning the Git repository'
-                git 'https://github.com/Tameemahmedd/pet-clinic'  // Replace with actual repo URL
+                git credentialsId: 'git-credentials', url: 'https://github.com/Tameemahmedd/pet-clinic.git'  // Replace with actual repo URL
             }
         }
 
