@@ -94,6 +94,7 @@ stage('Containerize') {
                                    // SSH into the EC2 instance to run the MySQL and Pet Clinic Docker containers (if not using local Docker)
                                    sh """
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo yum install docker -y'
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo systemctl start docker'
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker network create bootApp || true'  // Create network if not exists
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker pull mysql:9.0.1'  // Pull the MySQL image
                                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'sudo docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
