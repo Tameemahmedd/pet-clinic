@@ -16,18 +16,11 @@ pipeline {
 
 
     stages {
-        stage('Checkout') {
-            steps {
-                    git url: 'https://github.com/Tameemahmedd/pet-clinic.git',
-                    credentialsId: 'git-credentials',
-                    branch: 'main'
-            }
-        }
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
                 echo 'Cloning the Git repository'
-                git credentialsId: 'git-credentials', url: 'https://github.com/Tameemahmedd/pet-clinic.git'  // Replace with actual repo URL
+                git branch: 'main', credentialsId: 'git-credentials', url: 'https://github.com/Tameemahmedd/pet-clinic.git'  // Replace with actual repo URL
             }
         }
 
