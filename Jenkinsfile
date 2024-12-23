@@ -80,24 +80,27 @@ stage('Containerize') {
         stage('Deploy') {
             steps {
                 script {
-                    // Optional: Deploy the containers on EC2 instance using SSH
-                    echo 'Deploying the Docker containers on EC2'
+                                   // Change the permissions of the private key file
+                                   sh 'chmod 600 ${PRIVATE_KEY_PATH}'
 
-                    // Copy the JAR file to EC2 instance (if necessary for your app)
-//                     sh """
-//                         scp -i ${PRIVATE_KEY_PATH} target/pet-clinic-1.0.0.jar ${EC2_USER}@${EC2_IP}:/home/${EC2_USER}/pet-clinic/
-//                     """
+                                   // Optional: Deploy the containers on EC2 instance using SSH
+                                   echo 'Deploying the Docker containers on EC2'
 
-                    // SSH into the EC2 instance to run the MySQL and Pet Clinic Docker containers (if not using local Docker)
-                    sh """
-                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker network create bootApp || true'  // Create network if not exists
-                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker pull mysql:9.0.1'  // Pull the MySQL image
-                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
-                            -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DATABASE=pet_clinic mysql:9.0.1'  // Run MySQL container on EC2
-                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker pull tameemahmed/pet-clinic-1.0.1'
-                        ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker run -d --name pet-clinic -p ${PET_CLINIC_PORT}:9091 --network=bootApp \
-                            -e MYSQL_HOST=mysqldb -e MYSQL_PORT=${MYSQL_PORT} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'  // Run Pet Clinic container on EC2
-                    """
+                                   // Copy the JAR file to EC2 instance (if necessary for your app)
+                                   // sh """
+                                   //     scp -i ${PRIVATE_KEY_PATH} target/pet-clinic-1.0.0.jar ${EC2_USER}@${EC2_IP}:/home/${EC2_USER}/pet-clinic/
+                                   // """
+
+                                   // SSH into the EC2 instance to run the MySQL and Pet Clinic Docker containers (if not using local Docker)
+                                   sh """
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker network create bootApp || true'  // Create network if not exists
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker pull mysql:9.0.1'  // Pull the MySQL image
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker run -d --name mysqldb -p 3308:3306 --network=bootApp \
+                                           -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DATABASE=pet_clinic mysql:9.0.1'  // Run MySQL container on EC2
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker pull tameemahmed/pet-clinic-1.0.1'
+                                       ssh -i ${PRIVATE_KEY_PATH} ${EC2_USER}@${EC2_IP} 'docker run -d --name pet-clinic -p ${PET_CLINIC_PORT}:9091 --network=bootApp \
+                                           -e MYSQL_HOST=mysqldb -e MYSQL_PORT=${MYSQL_PORT} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'  // Run Pet Clinic container on EC2
+                                   """
                 }
             }
         }
